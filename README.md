@@ -27,13 +27,13 @@ Create a `.env.local` file to test form delivery locally. It is gitignored, so d
 
 ```bash
 SMTP_URL=smtps://christian%40tannahillsystems.com:<16_CHAR_GOOGLE_APP_PASSWORD>@smtp.gmail.com:465
-EMAIL_FROM="Tannahill Systems <contact@tannahillsystems.com>"
+EMAIL_FROM="Tannahill Systems <christian@tannahillsystems.com>"
 ```
 
 | Variable     | Required               | Description                                                                                                                                                                                                                               |
 | ------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SMTP_URL`   | Yes, for form delivery | SMTP connection string. Use a Google Workspace App Password, not the account password. URL-encode the `@` in the username as `%40`. If unset, `/api/contact` returns 503 and the form directs visitors to `contact@tannahillsystems.com`. |
-| `EMAIL_FROM` | No                     | Sender shown on inquiry emails. Defaults to `contact@tannahillsystems.com`.                                                                                                                                                               |
+| `EMAIL_FROM` | No                     | Sender shown on inquiry emails. Defaults to `christian@tannahillsystems.com`.                                                                                                                                                               |
 
 Inquiries are delivered to `christian@tannahillsystems.com`, with the visitor's address set as the reply-to.
 

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     const transporter = nodemailer.createTransport(smtpUrl);
 
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || siteConfig.emails.contact,
+      from: process.env.EMAIL_FROM || siteConfig.emails.primary,
       to: siteConfig.emails.primary,
       replyTo: body.email,
       subject: `[${siteConfig.companyName} Inquiry] ${body.serviceType ?? "General"} — ${body.name}`,
