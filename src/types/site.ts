@@ -17,11 +17,11 @@ export interface ProductItem {
   id: string;
   name: string;
   tagline: string;
-  status: "Production" | "Active R&D" | "Published Package";
+  category: "AI infrastructure" | "Applications" | "Developer tools";
+  status: "Public repository" | "Active R&D" | "Design study" | "Project";
   description: string;
   architecture: string[];
-  repoUrl: string;
-  liveUrl?: string;
+  repoUrl?: string;
 }
 
 export interface TechCategory {

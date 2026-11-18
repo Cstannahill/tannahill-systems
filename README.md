@@ -8,7 +8,7 @@ The corporate website and project inquiry platform for [Tannahill Systems](https
 - Tailwind CSS v4
 - nodemailer for contact form delivery
 - lucide-react icons
-- Inter and JetBrains Mono via `next/font`
+- Locally hosted Inter, Space Grotesk, and JetBrains Mono via `next/font`
 
 ## Getting Started
 

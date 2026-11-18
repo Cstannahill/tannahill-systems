@@ -1,86 +1,43 @@
+import { ArrowDown, ArrowUpRight, Terminal } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Code2, Cpu, Layers } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-zinc-800/80 bg-zinc-950 pt-16 pb-24 sm:pt-24 sm:pb-32">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-emerald-950),_var(--color-zinc-950)_60%)]" />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-medium text-emerald-300">
-            <Cpu className="h-3.5 w-3.5" />
-            <span>Custom Software Engineering & Applied AI Lab</span>
+    <section id="top" className="hero">
+      <div className="shell hero-layout">
+        <div>
+          <p className="kicker"><span className="signal" /> Software engineering studio · Illinois</p>
+          <h1>Custom software.<br /><em>Local-first AI.</em></h1>
+          <p className="hero-intro">Tannahill Systems builds web applications, private AI infrastructure, and developer tools. Work directly with {siteConfig.founderName} from architecture through deployment.</p>
+          <div className="actions">
+            <a className="button primary" href="#products">Explore the work <ArrowDown size={17} /></a>
+            <a className="button" href="#contact">Discuss a project <ArrowUpRight size={17} /></a>
           </div>
-
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:leading-[1.1]">
-            Production-Grade Software &{" "}
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              Private AI Systems
-            </span>
-          </h1>
-
-          <p className="mt-6 text-lg leading-relaxed text-zinc-400 sm:text-xl">
-            {siteConfig.companyName} is an independent software engineering studio and research lab.
-            We architect custom full-stack web platforms, local LLM inference pipelines, distributed data
-            scrapers, and native cross-platform tooling for businesses and technical teams.
-          </p>
-
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-6 py-3.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-emerald-500/10 transition-all hover:bg-emerald-400"
-            >
-              Commission a Project
-              <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#products"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900/70 px-6 py-3.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-zinc-700 hover:bg-zinc-900"
-            >
-              Explore R&D Systems
-            </a>
-          </div>
+          <dl className="hero-facts">
+            <div><dt>Applications</dt><dd>Web platforms and APIs</dd></div>
+            <div><dt>Applied AI</dt><dd>Inference and retrieval</dd></div>
+            <div><dt>Systems</dt><dd>Automation and tooling</dd></div>
+          </dl>
         </div>
-
-        <div className="mt-16 grid grid-cols-1 gap-4 border-t border-zinc-800/80 pt-12 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/30 p-5">
-            <div className="flex items-center gap-3 text-emerald-400">
-              <Code2 className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wider text-zinc-200">
-                Full-Stack Precision
-              </span>
+        <div className="hero-console">
+          <div className="terminal panel" aria-label="Studio project index">
+            <div className="terminal-bar"><span className="window-lights" aria-hidden="true"><i /><i /><i /></span><span>tannahill / workspace</span><Terminal size={15} aria-hidden="true" /></div>
+            <div className="terminal-body">
+              <p className="accent"><span aria-hidden="true">$ </span>ls ./selected-work</p>
+              <p><strong>LocalChat</strong><span>Local inference &amp; memory</span></p>
+              <p><strong>AI Gateway</strong><span>Multi-provider model routing</span></p>
+              <p><strong>LegisTrack</strong><span>Federal bill tracking</span></p>
+              <p><strong>TrendDev</strong><span>Job market analysis</span></p>
             </div>
-            <p className="mt-2 text-sm text-zinc-400">
-              End-to-end delivery across Next.js, TypeScript, .NET 9, FastAPI, and PostgreSQL with strict type safety.
-            </p>
+            <div className="terminal-foot"><span className="signal" /> Studio project index</div>
           </div>
-
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/30 p-5">
-            <div className="flex items-center gap-3 text-emerald-400">
-              <Cpu className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wider text-zinc-200">
-                Zero-Leakage Local AI
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-zinc-400">
-              Self-hosted LLM orchestration, custom RAG indexing, and QLoRA fine-tuning without third-party data exposure.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/30 p-5">
-            <div className="flex items-center gap-3 text-emerald-400">
-              <Layers className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wider text-zinc-200">
-                Modular Ownership
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-zinc-400">
-              Clean, maintainable repository handoffs with containerized deployments and zero vendor lock-in.
-            </p>
+          <div className="hero-notes">
+            <a href="#lab" className="note note-feature"><span>Local AI Lab</span><strong>Size an inference run</strong><ArrowUpRight size={17} /></a>
+            <a href="#architecture" className="note"><span>Engineering stack</span><strong>From UI to runtime</strong><ArrowUpRight size={17} /></a>
           </div>
         </div>
       </div>
+      <div className="tech-strip"><div className="shell">{["TypeScript", "React / Next.js", "C# / .NET", "Rust", "PostgreSQL", "Python", "llama.cpp", "AWS"].map(tech => <span key={tech}>{tech}</span>)}</div></div>
     </section>
   );
 }

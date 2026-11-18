@@ -1,85 +1,125 @@
+"use client";
+
+import { useRef, useState, useSyncExternalStore } from "react";
+import { ArrowUpRight, Bookmark, Search } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { ExternalLink, GitBranch, Box } from "lucide-react";
+
+const filters = ["All", "AI infrastructure", "Applications", "Developer tools"] as const;
+const storageKey = "tannahill-project-shortlist";
+const shortlistEvent = "tannahill-shortlist-change";
+let fallbackSnapshot: string | undefined;
+
+function subscribe(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(shortlistEvent, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(shortlistEvent, callback);
+  };
+}
+
+function getSnapshot() {
+  if (fallbackSnapshot !== undefined) return fallbackSnapshot;
+  try {
+    return localStorage.getItem(storageKey) ?? "[]";
+  } catch {
+    return "[]";
+  }
+}
+
+function getSavedProjects(snapshot: string): string[] {
+  try {
+    const values: unknown = JSON.parse(snapshot);
+    return Array.isArray(values)
+      ? siteConfig.products.filter(project => values.includes(project.id)).map(project => project.id)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function toggleSaved(id: string) {
+  const current = getSavedProjects(getSnapshot());
+  const next = current.includes(id) ? current.filter(value => value !== id) : [...current, id];
+  const snapshot = JSON.stringify(next);
+  try {
+    localStorage.setItem(storageKey, snapshot);
+    fallbackSnapshot = undefined;
+  } catch {
+    fallbackSnapshot = snapshot;
+  }
+  window.dispatchEvent(new Event(shortlistEvent));
+}
 
 export function ProductsSection() {
+  const [filter, setFilter] = useState<(typeof filters)[number]>("All");
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(siteConfig.products[0]?.id);
+  const [onlySaved, setOnlySaved] = useState(false);
+  const details = useRef<HTMLElement>(null);
+  const saved = getSavedProjects(useSyncExternalStore(subscribe, getSnapshot, () => "[]"));
+  const searchTerm = query.trim().toLowerCase();
+  const projects = siteConfig.products.filter(project =>
+    (filter === "All" || project.category === filter) &&
+    (!onlySaved || saved.includes(project.id)) &&
+    [project.name, project.tagline, project.description, ...project.architecture]
+      .join(" ").toLowerCase().includes(searchTerm)
+  );
+  const active = projects.find(project => project.id === selectedId) ?? projects[0];
+
+  function selectProject(id: string) {
+    setSelectedId(id);
+    if (window.matchMedia("(max-width: 800px)").matches) {
+      details.current?.focus({ preventScroll: true });
+      details.current?.scrollIntoView({ block: "start" });
+    }
+  }
+
   return (
-    <section id="products" className="border-b border-zinc-800/80 bg-zinc-950 py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-3xl">
-            <span className="text-xs font-semibold uppercase tracking-widest text-emerald-400">
-              Internal R&D & Proprietary Systems
-            </span>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Platforms Engineered In-House
-            </h2>
-            <p className="mt-4 text-base text-zinc-400">
-              Alongside client engagements, {siteConfig.companyName} actively develops and maintains
-              proprietary AI runtimes, static analysis engines, and cloud data platforms.
-            </p>
-          </div>
-          <a
-            href={siteConfig.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 self-start rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-700 hover:text-white"
-          >
-            <GitBranch className="h-4 w-4 text-emerald-400" />
-            View Open-Source Portfolio
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </div>
-
-        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {siteConfig.products.map((product) => (
-            <div
-              key={product.id}
-              className="group flex flex-col justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/25 p-7 transition-all hover:border-emerald-500/40 hover:bg-zinc-900/50"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2.5">
-                    <Box className="h-5 w-5 text-emerald-400" />
-                    <h3 className="text-lg font-bold text-white">{product.name}</h3>
-                  </div>
-                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-xs font-medium text-emerald-300">
-                    {product.status}
-                  </span>
-                </div>
-
-                <p className="mt-1.5 text-xs font-medium text-zinc-400">{product.tagline}</p>
-
-                <p className="mt-4 text-sm leading-relaxed text-zinc-300">
-                  {product.description}
-                </p>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between border-t border-zinc-800/80 pt-4">
-                <div className="flex flex-wrap gap-1.5">
-                  {product.architecture.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded bg-zinc-900 px-2 py-0.5 text-xs font-mono text-zinc-400 border border-zinc-800"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <a
-                  href={product.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300"
-                >
-                  Repository
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="products" className="section shell">
+      <div className="section-head">
+        <div><p className="kicker">Portfolio</p><h2>Selected work</h2></div>
+        <p>Local AI infrastructure, public-interest software, and tools for developers. Explore the architecture and source where available.</p>
       </div>
+      <div className="project-controls">
+        <div className="pills" role="group" aria-label="Project category">
+          {filters.map(value => <button key={value} className="pill" aria-pressed={filter === value} onClick={() => setFilter(value)}>{value}</button>)}
+        </div>
+        <label className="search-box">
+          <Search size={17} aria-hidden="true" />
+          <input type="search" aria-label="Search projects or technologies" placeholder="Search projects or technologies" value={query} onChange={event => setQuery(event.target.value)} />
+        </label>
+        <button className="pill shortlist" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}><Bookmark size={15} /> Shortlist ({saved.length})</button>
+      </div>
+      {active ? (
+        <div className="projects-layout">
+          <div className="project-grid">
+            {projects.map(project => (
+              <button key={project.id} className="project-card panel" aria-pressed={active.id === project.id} onClick={() => selectProject(project.id)}>
+                <span className="project-meta">{project.category}{saved.includes(project.id) && <Bookmark size={14} aria-label="Shortlisted" />}</span>
+                <strong>{project.name}</strong>
+                <span className="project-tagline">{project.tagline}</span>
+                <span className="tags">{project.architecture.slice(0, 3).map(tech => <span key={tech}>{tech}</span>)}</span>
+              </button>
+            ))}
+          </div>
+          <article ref={details} tabIndex={-1} className="project-detail panel" aria-label="Project details" aria-live="polite" aria-atomic="true">
+            <p className="kicker">{active.status}</p>
+            <h3>{active.name}</h3>
+            <p>{active.description}</p>
+            <div className="tags">{active.architecture.map(tech => <span key={tech}>{tech}</span>)}</div>
+            <div className="actions">
+              {active.repoUrl && <a className="button primary" href={active.repoUrl}>View source <ArrowUpRight size={15} /></a>}
+              <button className="button" aria-pressed={saved.includes(active.id)} onClick={() => toggleSaved(active.id)}><Bookmark size={15} /> {saved.includes(active.id) ? "Remove from shortlist" : "Shortlist project"}</button>
+            </div>
+          </article>
+        </div>
+      ) : (
+        <div className="empty panel" role="status">
+          <p>No projects match your filters.</p>
+          <button className="button" onClick={() => { setFilter("All"); setQuery(""); setOnlySaved(false); }}>Clear filters</button>
+        </div>
+      )}
     </section>
   );
 }
