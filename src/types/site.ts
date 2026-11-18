@@ -22,6 +22,7 @@ export interface ProductItem {
   description: string;
   architecture: string[];
   repoUrl?: string;
+  liveUrl?: string;
 }
 
 export interface TechCategory {

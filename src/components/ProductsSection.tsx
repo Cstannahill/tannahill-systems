@@ -109,7 +109,8 @@ export function ProductsSection() {
             <p>{active.description}</p>
             <div className="tags">{active.architecture.map(tech => <span key={tech}>{tech}</span>)}</div>
             <div className="actions">
-              {active.repoUrl && <a className="button primary" href={active.repoUrl}>View source <ArrowUpRight size={15} /></a>}
+              {active.liveUrl && <a className="button primary" href={active.liveUrl}>Visit live app <ArrowUpRight size={15} /></a>}
+              {active.repoUrl && <a className={active.liveUrl ? "button" : "button primary"} href={active.repoUrl}>View source <ArrowUpRight size={15} /></a>}
               <button className="button" aria-pressed={saved.includes(active.id)} onClick={() => toggleSaved(active.id)}><Bookmark size={15} /> {saved.includes(active.id) ? "Remove from shortlist" : "Shortlist project"}</button>
             </div>
           </article>

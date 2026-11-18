@@ -86,6 +86,18 @@ export const siteConfig: SiteConfig = {
   ],
   products: [
     {
+      id: "budmath",
+      name: "BudMath",
+      category: "Applications",
+      tagline: "Compare dispensary prices across Illinois.",
+      status: "Public repository",
+      description:
+        "A public price comparison app for Illinois dispensaries. Its ingestion pipeline collects retailer menus and normalizes product, price, and availability data for search and comparison.",
+      architecture: ["Next.js", "TypeScript", "FastAPI", "SQLite", "APScheduler"],
+      repoUrl: "https://github.com/Cstannahill/discountdispensaryil",
+      liveUrl: "https://budmath.app",
+    },
+    {
       id: "localchat-engine",
       name: "LocalChat",
       category: "AI infrastructure",
@@ -116,6 +128,7 @@ export const siteConfig: SiteConfig = {
         "A web application that ingests, categorizes, and summarizes U.S. federal legislation. A relational data model supports structured bill tracking, while the summarization workflow turns bill text into readable updates.",
       architecture: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
       repoUrl: "https://github.com/Cstannahill/legistrack",
+      liveUrl: "https://legistrack.vercel.app/",
     },
     {
       id: "trenddev",
